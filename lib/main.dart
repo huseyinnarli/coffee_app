@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:newapp/pages/homepage.dart';
+import 'package:newapp/pages/maintab.dart';
 
 void main() {
   runApp(const MyApp());
@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
           indicatorSize: TabBarIndicatorSize.label,
         ),
       ),
-      home: const Home(),
+      home: const MainPage(),
     );
   }
 }

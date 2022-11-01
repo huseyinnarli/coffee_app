@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import '../collections/collection_item.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -25,152 +25,59 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: Stack(
+        child: Column(
           children: [
-            Column(
-              children: [
-                Padding(
+            Padding(
+              padding: ProjectPadding()._horizontalPadding,
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [_title(_firstTitleText), _searchButton()],
+                  ),
+                ],
+              ),
+            ),
+            Expanded(
+              flex: 3,
+              child: ListView.builder(
+                physics: const BouncingScrollPhysics(),
+                scrollDirection: Axis.horizontal,
+                padding: ProjectPadding()._firstListBuilder,
+                itemCount: _items.length,
+                itemBuilder: (context, index) {
+                  return _FirstList(model: _items[index]);
+                },
+              ),
+            ),
+            Expanded(
+              flex: 7,
+              child: Container(
+                color: ProjetColors()._containerColor,
+                child: Padding(
                   padding: ProjectPadding()._horizontalPadding,
                   child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [_title(_firstTitleText), _searchButton()],
-                      ),
+                      _title(_secontTitleText),
+                      Expanded(
+                        child: ListView.builder(
+                          physics: const BouncingScrollPhysics(),
+                          itemCount: _itemss.length,
+                          itemBuilder: (context, index) {
+                            return _SecondListCard(cmodel: _itemss[index]);
+                          },
+                        ),
+                      )
                     ],
                   ),
                 ),
-                Expanded(
-                  flex: 3,
-                  child: ListView.builder(
-                    physics: const BouncingScrollPhysics(),
-                    scrollDirection: Axis.horizontal,
-                    padding: ProjectPadding()._firstListBuilder,
-                    itemCount: _items.length,
-                    itemBuilder: (context, index) {
-                      return _FirstList(model: _items[index]);
-                    },
-                  ),
-                ),
-                Expanded(
-                  flex: 6,
-                  child: Container(
-                    color: ProjetColors()._containerColor,
-                    child: Padding(
-                      padding: ProjectPadding()._horizontalPadding,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          _title(_secontTitleText),
-                          Expanded(
-                            child: ListView.builder(
-                              itemCount: _itemss.length,
-                              itemBuilder: (context, index) {
-                                return Card(
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius:
-                                          ProjectShape()._radiusTwelve),
-                                  child: SizedBox(
-                                      height: ProjectNumbers()._cardSize,
-                                      child: Padding(
-                                        padding: ProjectPadding()._cardListTen,
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.start,
-                                          children: [
-                                            Container(
-                                              margin: ProjectPadding()
-                                                  ._imageListTen,
-                                              height:
-                                                  ProjectNumbers()._fContainer2,
-                                              width:
-                                                  ProjectNumbers()._fContainer2,
-                                              decoration: BoxDecoration(
-                                                  image: const DecorationImage(
-                                                    fit: BoxFit.fill,
-                                                    image: AssetImage(
-                                                        'assets/cappuccino.jpg'),
-                                                  ),
-                                                  borderRadius: ProjectShape()
-                                                      ._radiusTwelve),
-                                            ),
-                                            Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                _cardTitle(index, context),
-                                                Row(
-                                                  children: [
-                                                    _tags(
-                                                        _itemss[index].tags[0],
-                                                        ProjetColors()._tagBlueA,
-                                                        ProjetColors()._tagBlue),
-                                                    _itemss[index].tags.length >
-                                                            1
-                                                        ? _tags(
-                                                            _itemss[index]
-                                                                .tags[1],
-                                                            ProjetColors()._tagOrangeA,
-                                                            ProjetColors()._tagOrange)
-                                                        : const SizedBox(),
-                                                    _itemss[index].tags.length >
-                                                            2
-                                                        ? _tags(
-                                                            _itemss[index]
-                                                                .tags[2],
-                                                            ProjetColors()._tagPurpleA,
-                                                            ProjetColors()._tagPurple)
-                                                        : const SizedBox(),
-                                                  ],
-                                                ),
-                                                Row(
-                                                  children: [
-                                                    const Icon(Icons.location_on),
-                                                    Text(_itemss[index].location),
-                                                  ],
-                                                )
-                                              ],
-                                            )
-                                          ],
-                                        ),
-                                      )),
-                                );
-                              },
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                  ),
-                )
-              ],
+              ),
             )
           ],
         ),
       ),
     );
-  }
-
-  Container _tags(String a, Color b, Color c) {
-    return Container(
-      margin: ProjectPadding()._tagsPadding,
-      width: (a.length > 5) ? 100 : 50,
-      height: ProjectNumbers()._tagsN,
-      decoration: ShapeDecoration(shape: const StadiumBorder(), color: b),
-      child: Center(
-          child: Text(
-        a,
-        style: TextStyle(color: c),
-      )),
-    );
-  }
-
-  Text _cardTitle(int index, BuildContext context) {
-    return Text(_itemss[index].name,
-        style: Theme.of(context)
-            .textTheme
-            .headline6
-            ?.copyWith(fontWeight: FontWeight.bold));
   }
 
   SizedBox _searchButton() {
@@ -204,6 +111,104 @@ class _HomeState extends State<Home> {
   }
 }
 
+class _SecondListCard extends StatelessWidget {
+  const _SecondListCard({
+    Key? key,
+    required PopularCoffee cmodel,
+  })  : _cmodel = cmodel,
+        super(key: key);
+
+  final PopularCoffee _cmodel;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: ProjectPadding()._cardVertical,
+      child: Card(
+        margin: EdgeInsets.zero,
+        shape: RoundedRectangleBorder(borderRadius: ProjectShape()._radiusTwelve),
+        child: SizedBox(
+            height: ProjectNumbers()._cardSize,
+            child: Padding(
+              padding: ProjectPadding()._cardList,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Container(
+                    margin: ProjectPadding()._imageListTen,
+                    height: ProjectNumbers()._fContainer2,
+                    width: ProjectNumbers()._fContainer2,
+                    decoration: BoxDecoration(
+                        image: DecorationImage(
+                          fit: BoxFit.fill,
+                          image: AssetImage(_cmodel.image),
+                        ),
+                        borderRadius: ProjectShape()._radiusTwelve),
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _Title(model: _cmodel),
+                      Row(
+                        children: [
+                          _tags(0),
+                          (_cmodel.tags.length > 1) ? _tags(1) : const SizedBox(),
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          const Icon(Icons.location_on),
+                          Text(_cmodel.location),
+                        ],
+                      )
+                    ],
+                  )
+                ],
+              ),
+            )),
+      ),
+    );
+  }
+
+  Container _tags(int x) {
+    return Container(
+      margin: ProjectPadding()._tagsPadding,
+      width: (_cmodel.tags[x].length > 5) ? 100 : 50,
+      height: ProjectNumbers()._tagsN,
+      decoration: ShapeDecoration(
+          shape: const StadiumBorder(),
+          color:
+              (x == 0) ? ProjetColors()._tagBlueA : ProjetColors()._tagOrangeA),
+      child: Center(
+          child: Text(
+        _cmodel.tags[x],
+        style: TextStyle(
+            color:
+                (x == 0) ? ProjetColors()._tagBlue : ProjetColors()._tagOrange),
+      )),
+    );
+  }
+}
+
+class _Title extends StatelessWidget {
+  const _Title({
+    Key? key,
+    required PopularCoffee model,
+  })  : _model = model,
+        super(key: key);
+
+  final PopularCoffee _model;
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(_model.name,
+        style: Theme.of(context)
+            .textTheme
+            .headline6
+            ?.copyWith(fontWeight: FontWeight.bold));
+  }
+}
+
 class _FirstList extends StatelessWidget {
   const _FirstList({
     Key? key,
@@ -223,9 +228,9 @@ class _FirstList extends StatelessWidget {
           height: ProjectNumbers()._fContainer,
           width: ProjectNumbers()._fContainer,
           decoration: BoxDecoration(
-              image: const DecorationImage(
-                fit: BoxFit.fill,
-                image: AssetImage('assets/cappuccino.jpg'),
+              image: DecorationImage(
+                fit: BoxFit.cover,
+                image: AssetImage(_model.imagePath),
               ),
               borderRadius: ProjectShape()._radiusTen),
         ),
@@ -242,7 +247,8 @@ class ProjectPadding {
   final _firstListBuilder =
       const EdgeInsets.only(top: 20, bottom: 10, left: 20);
   final _firstListContainer = const EdgeInsets.only(right: 10, bottom: 10);
-  final _cardListTen = const EdgeInsets.all(10);
+  final _cardList = const EdgeInsets.all(10);
+  final _cardVertical = const EdgeInsets.only(top: 10);
   final _imageListTen = const EdgeInsets.only(right: 10);
   final _tagsPadding = const EdgeInsets.only(top: 10, right: 10, bottom: 2);
 }
@@ -257,7 +263,7 @@ class ProjectNumbers {
   final double _searchButtonW = 60;
   final double _searchButtonI = 40;
   final double _textHeight = 1.5;
-  final double _fContainer = 150;
+  final double _fContainer = 130;
   final double _fContainer2 = 80;
   final double _tagsN = 20;
   final double _cardSize = 100;
@@ -273,66 +279,4 @@ class ProjetColors {
   final Color _tagOrangeA = Colors.orange.shade100;
   final Color _tagPurple = Colors.purple;
   final Color _tagPurpleA = Colors.purple.shade100;
-}
-
-class CollectionModel {
-  final String modeltype;
-  final String imagePath;
-  CollectionModel({
-    required this.modeltype,
-    required this.imagePath,
-  });
-}
-
-class CollectionItems {
-  late final List<CollectionModel> items;
-
-  CollectionItems() {
-    items = [
-      CollectionModel(modeltype: 'Coffee', imagePath: 'imagePath'),
-      CollectionModel(modeltype: 'Beverages', imagePath: 'imagePath'),
-      CollectionModel(modeltype: 'Snack', imagePath: 'imagePath')
-    ];
-  }
-}
-
-class PopularCoffee {
-  final String name;
-  final String image;
-  final List<String> tags;
-  final String location;
-  PopularCoffee({
-    required this.name,
-    required this.image,
-    required this.tags,
-    required this.location,
-  });
-}
-
-class PopularCoffeeItems {
-  late final List<PopularCoffee> itemss;
-
-  PopularCoffeeItems() {
-    itemss = [
-      PopularCoffee(
-          name: 'Cappuccino',
-          image: 'image',
-          tags: ['Donut', 'Snack'],
-          location: 'Coffee Planet'),
-      PopularCoffee(
-          name: 'Caramel Macchiato',
-          image: 'image',
-          tags: ['Sweet Cakes'],
-          location: 'Coffee Planet'),
-      PopularCoffee(
-          name: 'Creamy Ice Coffee',
-          image: 'image',
-          tags: ['Donut', 'Sweet Cakes'],
-          location: 'Coffee Planet'),
-    ];
-  }
-}
-
-class ProjectImages {
-  final imageCollection = '';
 }
