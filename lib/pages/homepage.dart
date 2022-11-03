@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:newapp/pages/coffeepage.dart';
 import '../collections/collection_item.dart';
 
 class Home extends StatefulWidget {
@@ -124,48 +125,60 @@ class _SecondListCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: ProjectPadding()._cardVertical,
-      child: Card(
-        margin: EdgeInsets.zero,
-        shape: RoundedRectangleBorder(borderRadius: ProjectShape()._radiusTwelve),
-        child: SizedBox(
-            height: ProjectNumbers()._cardSize,
-            child: Padding(
-              padding: ProjectPadding()._cardList,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Container(
-                    margin: ProjectPadding()._imageListTen,
-                    height: ProjectNumbers()._fContainer2,
-                    width: ProjectNumbers()._fContainer2,
-                    decoration: BoxDecoration(
-                        image: DecorationImage(
-                          fit: BoxFit.fill,
-                          image: AssetImage(_cmodel.image),
+      child: GestureDetector(
+        onTap: () {
+          Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) {
+              return const CoffeePage();
+            },
+          ));
+        },
+        child: Card(
+          margin: EdgeInsets.zero,
+          shape: RoundedRectangleBorder(
+              borderRadius: ProjectShape()._radiusTwelve),
+          child: SizedBox(
+              height: ProjectNumbers()._cardSize,
+              child: Padding(
+                padding: ProjectPadding()._cardList,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Container(
+                      margin: ProjectPadding()._imageListTen,
+                      height: ProjectNumbers()._fContainer2,
+                      width: ProjectNumbers()._fContainer2,
+                      decoration: BoxDecoration(
+                          image: DecorationImage(
+                            fit: BoxFit.fill,
+                            image: AssetImage(_cmodel.image),
+                          ),
+                          borderRadius: ProjectShape()._radiusTwelve),
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        _Title(model: _cmodel),
+                        Row(
+                          children: [
+                            _tags(0),
+                            (_cmodel.tags.length > 1)
+                                ? _tags(1)
+                                : const SizedBox(),
+                          ],
                         ),
-                        borderRadius: ProjectShape()._radiusTwelve),
-                  ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      _Title(model: _cmodel),
-                      Row(
-                        children: [
-                          _tags(0),
-                          (_cmodel.tags.length > 1) ? _tags(1) : const SizedBox(),
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          const Icon(Icons.location_on),
-                          Text(_cmodel.location),
-                        ],
-                      )
-                    ],
-                  )
-                ],
-              ),
-            )),
+                        Row(
+                          children: [
+                            const Icon(Icons.location_on),
+                            Text(_cmodel.location),
+                          ],
+                        )
+                      ],
+                    )
+                  ],
+                ),
+              )),
+        ),
       ),
     );
   }
